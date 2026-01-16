@@ -1,7 +1,8 @@
 import CustumBtn from "./CustumBtn";
 
 import { useState } from "react";
-const FormPlan = () => {
+
+const FormPlan = ({ typeDeDocument, setProjet }) => {
   const [nomPlan, setNomPlan] = useState("");
   const [descriptionPlan, setDescriptionPlan] = useState("");
   const [formatPlan, setFormatPlan] = useState("");
@@ -24,6 +25,25 @@ const FormPlan = () => {
     setFormatChecked(true);
   };
 
+  const finalDataSend = () => {
+    const plan = {
+      type: typeDeDocument,
+      nom: nomPlan,
+      description: descriptionPlan,
+      format: formatPlan,
+      exemplaires: exemplaires,
+    };
+    if (nomPlan && descriptionPlan && formatPlan && exemplaires) {
+      setProjet((prevProjet) => ({
+        ...prevProjet,
+        docmuments: [...prevProjet.docmuments, plan],
+      }));
+      alert("Plan ajouté avec succès!", "success");
+    } else {
+      alert("Veuillez remplir tous les champs du formulaire.", "danger");
+    }
+  };
+
   return (
     <form className="col-12">
       <div className="col mb-3">
@@ -35,6 +55,7 @@ const FormPlan = () => {
           id="nomPlan"
           placeholder="Entrez le nom du plan..."
           className="form-control"
+          value={nomPlan}
           onChange={(e) => setNomPlan(e.target.value)}
         />
       </div>
@@ -46,6 +67,7 @@ const FormPlan = () => {
           name="descriptionPlan"
           id="descriptionPlan"
           className="form-control"
+          value={descriptionPlan}
           rows={3}
           placeholder="Décrivez le plan en quelques mots..."
           onChange={(e) => setDescriptionPlan(e.target.value)}
@@ -119,6 +141,7 @@ const FormPlan = () => {
           type="number"
           id="exemplaires"
           className="form-control"
+          value={exemplaires}
           onChange={(e) => setExemplaires(e.target.value)}
         />
       </div>
@@ -129,7 +152,11 @@ const FormPlan = () => {
               key={index}
               type="button"
               className={btns[index].className}
-              onClick={() => {}}
+              onClick={(e) => {
+                e.preventDefault();
+                if (index === 2) {
+                }
+              }}
             >
               {btns[index].label}
             </CustumBtn>

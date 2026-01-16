@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BrowserRouter, useNavigate } from "react-router-dom";
 
-const FormInfos = ({ step }) => {
+const FormInfos = ({ step, sendData, typeDeDocument }) => {
   const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
   const [docType, setDocType] = useState("");
@@ -10,16 +10,22 @@ const FormInfos = ({ step }) => {
 
   const handleForm = (e) => {
     e.preventDefault();
-    const project = {
-      projectName,
-      description,
-      docType,
-    };
 
     if (projectName && description && docType) {
-      step((prevStep) => prevStep + 1); // Move to the next step
-
-      console.log(project);
+      const project = {
+        nomProjet: projectName,
+        descprojet: description,
+        docmuments: [],
+      };
+      sendData(project);
+      typeDeDocument(docType);
+      // Move to the next step
+      if (docType === "Rapport") {
+        step((prevStep) => prevStep + 1);
+      } else if (docType === "Plan") {
+        step((prevStep) => prevStep + 2);
+      }
+      // console.log(project);
       // Reset form fields
       setProjectName("");
       setDescription("");
