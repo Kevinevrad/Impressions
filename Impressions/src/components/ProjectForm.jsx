@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { BrowserRouter, useNavigate } from "react-router-dom";
+import InputField from "./MyComponents/InputField";
+import TextArea from "./MyComponents/TextArea";
 
-const FormInfos = ({ step, sendData, typeDeDocument }) => {
+const ProjectForm = ({ step, sendData, typeDeDocument }) => {
   const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
   const [docType, setDocType] = useState("");
@@ -34,44 +36,31 @@ const FormInfos = ({ step, sendData, typeDeDocument }) => {
   };
 
   return (
-    <form action="#" className="row g-4" onSubmit={handleForm}>
-      <div className="col-12 my-2">
-        <label className="form-label" htmlFor="project">
-          Project Name
-        </label>
-        <input
-          id="project"
-          type="text"
-          className="form-control"
-          placeholder="Enter the project name"
-          onChange={(e) => {
-            setProjectName(e.target.value);
-          }}
-        />
-      </div>
+    <form action="#" onSubmit={handleForm}>
+      <InputField
+        label={"Nom Projet"}
+        type="text"
+        placeholder={"Entrez le nom du projet"}
+        onChange={(e) => setProjectName(e.target.value)}
+      />
 
-      <div className="col-12  ">
-        <label className="form-label" htmlFor="description">
-          Description
-        </label>
-        <textarea
-          id="description"
-          className="form-control"
-          placeholder="Describe your project in a few words..."
-          rows={3}
-          onChange={(e) => {
-            setDescription(e.target.value);
-          }}
-        ></textarea>
-      </div>
-
-      <div className="col-12 mb-2">
-        <h6 className="mb-3 fw-semibold">
+      <TextArea
+        label={"Description du projet"}
+        placeholder={"Décrivez votre projet en quelques mots..."}
+        // value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
+      <hr />
+      <div className="col-12 mb-3">
+        <label htmlFor="selectInfo" className="form-label fw-bold">
+          {" "}
           Avant d'aller plus loin,
-          <br /> veuillez choisir le type de document à imprimer
-        </h6>
+          <br />
+          Veuillez sélectionner le type de document à imprimer :
+        </label>
         <select
-          className="form-select"
+          className="form-select  "
+          id="selectInfo"
           defaultValue=""
           aria-label="Default select example"
           onChange={(e) => {
@@ -86,13 +75,12 @@ const FormInfos = ({ step, sendData, typeDeDocument }) => {
           ))}
         </select>
       </div>
-      <div className="col-12 d-flex justify-content-end  ">
-        <button className="py-2 px-4 btn btn-dark fw-bold" type="submit">
-          Suivant &gt;
-        </button>
-      </div>
+
+      <button className="py-2 px-5 btn btn-secondary fw-bold" type="submit">
+        Suivant &gt;
+      </button>
     </form>
   );
 };
 
-export default FormInfos;
+export default ProjectForm;
