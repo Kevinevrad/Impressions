@@ -15,11 +15,9 @@ const TextArea = ({
         id={label}
         className="form-control  "
         placeholder={placeholder}
-        rows={3}
+        rows={4}
         value={value}
-        onChange={(e) => {
-          onChange(e.target.value);
-        }}
+        onChange={onChange}
       ></textarea>
       {errors && <div className="invalid-feedback">{errors}</div>}
     </div>

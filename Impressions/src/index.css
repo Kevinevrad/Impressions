@@ -13,4 +13,9 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --infratp-green: #1f8b4c;
+  --infratp-green-dark: #166a3a;
+  --infratp-gray: #6c757d;
+  --infratp-bg: #f8f9fa;
 }

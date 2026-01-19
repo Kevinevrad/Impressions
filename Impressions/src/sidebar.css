@@ -1,0 +1,40 @@
+.sidebar {
+  background-color: var(--infratp-gray);
+  color: white;
+  height: 100vh;
+  width: 220px;
+  transition: width 0.3s ease;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.sidebar.collapsed {
+  width: 150px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar button {
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

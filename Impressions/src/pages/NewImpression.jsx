@@ -1,12 +1,11 @@
 import { useState } from "react";
-import FormInfos from "../components/ProjectForm.jsx";
 
 import SideBar from "../components/SideBar";
 import Logo from "../components/MyComponents/Logo.jsx";
-import FormRapport from "../components/FormRapport.jsx";
-import FormPlan from "../components/FormPlan.jsx";
-import Greeting from "../components/Greeting.jsx";
+import Stepper from "../components/MyComponents/Stepper.jsx";
+
 import ImpHeader from "../components/MyComponents/ImpHeader.jsx";
+import ProjectForm from "../components/ProjectForm.jsx";
 
 const NewImpression = ({ setMyProjects }) => {
   const [etape, setEtape] = useState(1);
@@ -20,12 +19,12 @@ const NewImpression = ({ setMyProjects }) => {
 
   return (
     <div className="container-fluid min-vh-100">
-      <div className="row h-100">
+      <div className=" d-flex flex-column flex-md-row">
         {/* SIDEBAR */}
         <SideBar step={etape} />
 
         {/* MAIN CONTENT */}
-        <div className="col-md-9 bg-light px-5 py-3 ">
+        <div className=" flex-grow-1 p-3 p-md-5">
           {/* GREETING PART */}
           <div className="header">
             <Logo logoHeight="100" />
@@ -39,31 +38,10 @@ const NewImpression = ({ setMyProjects }) => {
               }
             />
           </div>
-
+          {/* STEP INDICATOR */}
+          <Stepper currentStep={etape}></Stepper>
           {/* FORM FOR PROJECT INFOS */}
-          {etape === 1 && (
-            <FormInfos
-              sendData={setProjet}
-              typeDeDocument={setTypeDeDocument}
-              step={setEtape}
-            />
-          )}
-
-          {/* FORM FOR RAPPORTS INFOS */}
-          {etape === 2 && (
-            <FormRapport
-              etape={setEtape}
-              typeDeDocument={typeDeDocument}
-              setProjet={setProjet}
-            />
-          )}
-
-          {/* FORM FOR PLANS INFOS */}
-          {etape === 3 && (
-            <FormPlan currEtape={setEtape} typeDeDocument={typeDeDocument} />
-          )}
-
-          {console.log(projet)}
+          {etape === 1 && <ProjectForm onNext={() => setEtape(2)} />}
         </div>
       </div>
     </div>
