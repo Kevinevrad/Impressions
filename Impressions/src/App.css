@@ -12,12 +12,12 @@ html {
 
 body {
   box-sizing: border-box;
-  /* padding: 0.5rem; */
+
   font-weight: 400;
   font-size: 1.6rem;
   color: #777;
   line-height: 1.7;
-  background-color: #fff;
+  background-color: #f8fafc;
   /* height: 100vh; */
   /* overflow: hidden; */
 }

@@ -1,0 +1,45 @@
+.sidebar {
+  width: 350px;
+  border-radius: 0 20px 20px 0;
+}
+
+.steps li {
+  opacity: 0.7;
+}
+
+.steps li.active {
+  opacity: 1;
+}
+
+.steps li span {
+  width: 3rem;
+  height: 3rem;
+  border: 2.5px solid #1f8b4c;
+}
+
+.steps li.active span {
+  background: #fff;
+  color: #1f8b4c;
+}
+
+.steps small {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.content {
+  background: #f8fafc;
+}
+
+.form-box {
+  max-width: 600px;
+}
+
+.btn-primary {
+  background-color: #0f172a;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #020617;
+}

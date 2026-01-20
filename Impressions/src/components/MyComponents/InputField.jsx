@@ -8,12 +8,12 @@ const InputField = ({
 }) => {
   return (
     <div className="col-12 form-group mb-4">
-      <label htmlFor={label} className="form-label fw-bold">
+      <label htmlFor={label} className="form-label fs-6 fw-bold">
         {label}
       </label>
       <input
         type={type}
-        className={`form-control  ${errors ? "is-invalid" : ""}`}
+        className={`form-control ${errors ? "is-invalid" : ""}`}
         id={label}
         value={value}
         onChange={onChange}

@@ -7,7 +7,7 @@ const TextArea = ({
   errors,
 }) => {
   return (
-    <div className="col-12 form-group mb-4">
+    <div className="col-12 form-group mb-4 ">
       <label className="form-label fw-bold" htmlFor={label}>
         {label}
       </label>
