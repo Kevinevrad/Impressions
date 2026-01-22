@@ -1,23 +1,19 @@
-import CustumBtn from "./CustumBtn";
-
 import { useState } from "react";
+import BtnWithIcon from "./BtnWithIcon";
+import InputField from "./MyComponents/InputField";
+import TextArea from "./MyComponents/TextArea";
+import InputRadio from "./MyComponents/InputRadio";
 
-const FormPlan = ({ typeDeDocument, setProjet }) => {
+const FormPlan = ({ documentType, setProjet }) => {
   const [nomPlan, setNomPlan] = useState("");
   const [descriptionPlan, setDescriptionPlan] = useState("");
   const [formatPlan, setFormatPlan] = useState("");
   const [formatChecked, setFormatChecked] = useState(false);
+  const [errors, setErrors] = useState({});
+
   const [exemplaires, setExemplaires] = useState(1);
 
-  //  Button values
-  const btns = [
-    { label: "Ajouter un autre plan", className: "btn btn-primary py-2 px-4" },
-    {
-      label: "Enreigistrez des rapports",
-      className: "btn btn-secondary py-2 px-4",
-    },
-    { label: "Terminer", className: "btn btn-success py-2 px-4 fw-bold" },
-  ];
+  const loadData = () => {};
 
   //   Handle radio button change
   const handleRadioChange = (e) => {
@@ -25,143 +21,153 @@ const FormPlan = ({ typeDeDocument, setProjet }) => {
     setFormatChecked(true);
   };
 
-  const finalDataSend = () => {
-    const plan = {
-      type: typeDeDocument,
-      nom: nomPlan,
-      description: descriptionPlan,
-      format: formatPlan,
-      exemplaires: exemplaires,
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!nomPlan) {
+      newErrors.nomPlan = "Le nom du plan est requis";
+    }
+
+    if (exemplaires < 1) {
+      newErrors.exemplaires = "Nombre sup ou égal à 1";
+    } else if (isNaN(exemplaires)) {
+      newErrors.exemplaires =
+        "Le nombre d'exemplaires doit être un nombre valide";
+    }
+
+    if (!formatChecked) {
+      newErrors.formatPlan = "Fromat requis";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const finalDataSend = (e) => {
+    e.preventDefault();
+
+    // DATA FORMATING
+    const data = {
+      nomPlan: nomPlan,
+      descriptionPlan: descriptionPlan,
+      formatDocument: formatPlan,
+      nombreExemplaire: exemplaires,
+      nbreTotalImprimer: exemplaires,
     };
-    if (nomPlan && descriptionPlan && formatPlan && exemplaires) {
-      setProjet((prevProjet) => ({
-        ...prevProjet,
-        docmuments: [...prevProjet.docmuments, plan],
-      }));
-      alert("Plan ajouté avec succès!", "success");
-    } else {
-      alert("Veuillez remplir tous les champs du formulaire.", "danger");
+
+    if (e.target.textContent === "Rapport") {
+      documentType("Rapport");
+    }
+
+    if (e.target.textContent === "Plan") {
+      if (validateForm()) {
+        //UPDATING DATA TO THE PARENT STATE
+        setProjet((prevProjet) => ({
+          ...prevProjet,
+          docmuments: {
+            ...prevProjet.docmuments,
+            Plans: [...prevProjet.docmuments.Plans, data],
+          },
+        }));
+        setDescriptionPlan("");
+        setExemplaires("");
+        setFormatPlan("");
+        setNomPlan("");
+        alert("Data enreigistré ✅");
+      }
     }
   };
 
   return (
     <form className="col-12">
-      <div className="col mb-3">
-        <label className="form-label" htmlFor="nomPlan">
-          Nom du plan
-        </label>
-        <input
-          type="text"
-          id="nomPlan"
-          placeholder="Entrez le nom du plan..."
-          className="form-control"
-          value={nomPlan}
-          onChange={(e) => setNomPlan(e.target.value)}
-        />
-      </div>
-      <div className="col  mb-1">
-        <label className="form-label" htmlFor="descriptionPlan">
-          Description du plan
-        </label>
-        <textarea
-          name="descriptionPlan"
-          id="descriptionPlan"
-          className="form-control"
-          value={descriptionPlan}
-          rows={3}
-          placeholder="Décrivez le plan en quelques mots..."
-          onChange={(e) => setDescriptionPlan(e.target.value)}
-        ></textarea>
-      </div>
-      <div className="col mb-3 d-flex flex-row align-items-center justify-content-between gap-3">
-        <label className="form-label" htmlFor="fomatPlan">
-          Format du plan
-        </label>
-        <div className="d-flex flex-row align-items-center gap-4">
-          <div className="form-check">
-            <label htmlFor="formatA3" className="form-check-label">
-              A3
-            </label>
-            <input
-              type="radio"
-              onChange={handleRadioChange}
-              className="form-check-input"
-              id="formatA3"
-              value="A3"
-              checked={formatPlan === "A3" ? true : false}
-            />
-          </div>
-          <div className="form-check">
-            <label htmlFor="formatA2" className="form-check-label">
-              A2
-            </label>
-            <input
-              type="radio"
-              onChange={handleRadioChange}
-              className="form-check-input"
-              id="formatA2"
-              value="A2"
-              checked={formatPlan === "A2" ? true : false}
-            />
-          </div>
-          <div className="form-check">
-            <label htmlFor="formatA1" className="form-check-label">
-              A1
-            </label>
-            <input
-              type="radio"
-              onChange={handleRadioChange}
-              className="form-check-input"
-              id="formatA1"
-              value="A1"
-              checked={formatPlan === "A1" ? true : false}
-            />
-          </div>
-          <div className="form-check">
-            <label htmlFor="formatA0" className="form-check-label">
-              A0
-            </label>
-            <input
-              className="form-check-input"
-              id="formatA0"
-              type="radio"
-              onChange={handleRadioChange}
-              value="A0"
-              checked={formatPlan === "A0" ? true : false}
-            />
-          </div>
+      <div className="row">
+        <div className="col">
+          <InputField
+            label={"Nom du plan"}
+            type="text"
+            value={nomPlan}
+            onChange={(e) => setNomPlan(e.target.value)}
+            placeholder={"Entrez le nom du plan..."}
+            errors={errors.nomPlan}
+            crutial={true}
+          />
+        </div>
+        <div className="col">
+          <InputField
+            label={"Exemplaires"}
+            type="number"
+            value={exemplaires}
+            onChange={(e) => setExemplaires(e.target.value)}
+            // placeholder={"Nombre d'exemplaires..."}
+            errors={errors.exemplaires}
+            crutial={true}
+          />
         </div>
       </div>
 
-      <div className="col mb-3">
-        <label className="form-label" htmlFor="exemplaires">
-          Exemplaires
-        </label>
-        <input
-          type="number"
-          id="exemplaires"
-          className="form-control"
-          value={exemplaires}
-          onChange={(e) => setExemplaires(e.target.value)}
-        />
+      <div className="col">
+        <TextArea
+          label={"Description du plan"}
+          placeholder={"Décrivez le plan en quelques mots..."}
+          value={descriptionPlan}
+          onChange={(e) => setDescriptionPlan(e.target.value)}
+        ></TextArea>
       </div>
-      <div className="col gap-4 d-flex align-items-end justify-content-between ">
-        {btns.map((btn, index) => {
-          return (
-            <CustumBtn
+
+      <div className="col mb-3 d-flex flex-row align-items-center justify-content-between gap-3">
+        <label className="form-label fw-bold" htmlFor="fomatPlan">
+          Format du plan <span className="text-danger">*</span>
+        </label>
+        <div className="d-flex flex-row align-items-center gap-4">
+          {["A3", "A2", "A1", "A0"].map((format, index) => (
+            <InputRadio
+              format={format}
+              checked={formatPlan === format ? true : false}
+              onChange={handleRadioChange}
               key={index}
-              type="button"
-              className={btns[index].className}
-              onClick={(e) => {
-                e.preventDefault();
-                if (index === 2) {
-                }
-              }}
+              errors={errors.formatPlan}
+            />
+          ))}
+          {errors.formatPlan && (
+            <div className="text-danger">{errors.formatPlan}</div>
+          )}
+        </div>
+      </div>
+
+      <div className="col gap-4 d-flex align-items-start justify-content-between mt-2">
+        <div className="col d-flex gap-4 align-items-end justify-content-start">
+          {["Plan", "Rapport"].map((btnText, index) => (
+            <BtnWithIcon
+              btnLabel={btnText}
+              key={index}
+              onClick={(e) => finalDataSend(e)}
             >
-              {btns[index].label}
-            </CustumBtn>
-          );
-        })}
+              {btnText === "Rapport" && (
+                <>
+                  <path d="M5 1a2 2 0 0 0-2 2v1h10V3a2 2 0 0 0-2-2zm6 8H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1" />
+                  <path d="M0 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
+                </>
+              )}
+              {btnText === "Plan" && (
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+              )}
+            </BtnWithIcon>
+          ))}
+        </div>
+        <button className="btn btn-success fw-bold" type="submit">
+          Suivant
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            className="bi bi-arrow-right-circle-fill mx-2"
+            viewBox="0 0 16 16"
+          >
+            <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
+          </svg>
+        </button>
       </div>
     </form>
   );

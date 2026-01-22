@@ -1,122 +1,167 @@
 import { useState } from "react";
+import InputField from "./MyComponents/InputField";
+import Textarea from "./MyComponents/TextArea";
+import BtnWithIcon from "./BtnWithIcon.jsx";
 
-const FormRapport = ({ typeDeDocument, setProjet, etape }) => {
+const FormRapport = ({ setProjet, etape, documentType }) => {
   const [nomRapport, setNomRapport] = useState("");
   const [descriptionRapport, setDescriptionRapport] = useState("");
   const [nombrePages, setNombrePages] = useState(1);
   const [exemplaires, setExemplaires] = useState(1);
+  const [errors, setErrors] = useState({});
 
-  const finalDataSend = (e) => {
-    e.preventDefault();
-    const rapport = {
-      typeDeDocument,
-      nomRapport,
-      descriptionRapport,
-      nombrePages,
-      exemplaires,
-    };
+  const validateRapport = (e) => {
+    const newErrors = {};
 
-    if (nomRapport && descriptionRapport && nombrePages && exemplaires) {
-      setProjet((prevProjet) => ({
-        ...prevProjet,
-        docmuments: [...prevProjet.docmuments, rapport],
-      }));
-      alert("Rapport ajouté avec succès!", "success");
-    } else {
-      alert("Veuillez remplir tous les champs du formulaire.", "danger");
+    if (!nomRapport) {
+      newErrors.nomRapport = "Le nom du rapport est requis";
     }
+    if (!descriptionRapport) {
+      newErrors.descriptionRapport = "La description du rapport est requise";
+    }
+    if (nombrePages < 1) {
+      newErrors.nombrePages = "❌ Erreur : Entrez un nombre >= 1";
+    } else if (isNaN(nombrePages)) {
+      newErrors.nombrePages = "❌ Nombre Correct";
+    }
+
+    if (exemplaires < 1) {
+      newErrors.exemplaires = "❌ Erreur : Entrez un nombre >= 1";
+    } else if (isNaN(exemplaires)) {
+      newErrors.exemplaires = "❌ Nombre Correct";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  const finalDataSend = (e) => {
+    etape(3);
   };
 
   const addAnotherRapport = (e) => {
     e.preventDefault();
-    setNomRapport("");
-    setDescriptionRapport("");
-    setNombrePages(1);
-    setExemplaires(1);
+    // FORMATING DATA
+    const newRapport = {
+      format: "A4",
+      nomRapport,
+      descriptionRapport,
+      nombrePages,
+      exemplaires,
+      nbreTotalPages: nombrePages * exemplaires,
+    };
+
+    if (e.target.textContent === "Rapport") {
+      // Handle adding another rapport
+      console.log("Adding another rapport...");
+
+      if (validateRapport()) {
+        // UPDATE PARENT STATE WITH NEW RAPPORT
+        setProjet((prevProjet) => ({
+          ...prevProjet,
+          docmuments: {
+            ...prevProjet.docmuments,
+            Rapports: [...prevProjet.docmuments.Rapports, newRapport],
+          },
+        }));
+        // RESET FORM FIELDS
+        setNomRapport("");
+        setDescriptionRapport("");
+        setNombrePages(1);
+        setExemplaires(1);
+
+        alert("✅ Ajout Effectuer");
+      }
+    }
+
+    if (e.target.textContent === "Plan") {
+      // GO TO PLAN FORM
+      console.log("Navigating to Plan form...");
+      documentType("Plan");
+    }
   };
 
   return (
     <form className="col-12">
-      <div className="col mb-3">
-        <label className="form-label" htmlFor="nomRapport">
-          Nom du rapport
-        </label>
-        <input
-          type="text"
-          id="nomRapport"
-          placeholder="Entrez le nom du rapport..."
-          className="form-control"
-          onChange={(e) => setNomRapport(e.target.value)}
-          value={nomRapport}
-        />
-      </div>
-      <div className="col mb-3">
-        <label className="form-label" htmlFor="descriptionRapport">
-          Description du rapport
-        </label>
-        <textarea
-          name="descriptionRapport"
-          id="descriptionRapport"
-          className="form-control"
-          rows={3}
-          placeholder="Décrivez le rapport en quelques mots..."
-          onChange={(e) => setDescriptionRapport(e.target.value)}
-          value={descriptionRapport}
-        ></textarea>
-      </div>
+      <InputField
+        label={"Nom du rapport"}
+        type="text"
+        value={nomRapport}
+        placeholder={"Entrez le nom du rapport..."}
+        onChange={(e) => setNomRapport(e.target.value)}
+        errors={errors.nomRapport}
+        crutial={true}
+      ></InputField>
+
+      <Textarea
+        label={"Description du rapport"}
+        placeholder={"Décrivez le rapport en quelques mots..."}
+        value={descriptionRapport}
+        onChange={(e) => setDescriptionRapport(e.target.value)}
+        errors={errors.descriptionRapport}
+      ></Textarea>
+
       <div className="row">
         <div className="col">
-          <label className="form-label" htmlFor="nomRapport">
-            Nombre de pages
-          </label>
-          <input
+          <InputField
+            label={"Nombre de pages"}
             type="number"
-            // value={1}
-            id="nomRapport"
-            className="form-control"
-            onChange={(e) => setNombrePages(e.target.value)}
             value={nombrePages}
+            onChange={(e) => setNombrePages(e.target.value)}
+            errors={errors.nombrePages}
+            crutial={true}
           />
         </div>
         <div className="col">
-          <label className="form-label" htmlFor="exemplaires">
-            Exemplaires
-          </label>
-          <input
+          <InputField
+            label={"Exemplaires"}
             type="number"
             value={exemplaires}
-            id="exemplaires"
-            className="form-control"
             onChange={(e) => setExemplaires(e.target.value)}
+            errors={errors.exemplaires}
+            crutial={true}
           />
         </div>
       </div>
-      <div className="col gap-4 d-flex align-items-end justify-content-center mt-5">
+      <div className="col gap-4 d-flex align-items-end justify-content-center mt-2">
+        <div className="col d-flex gap-4 align-items-end justify-content-start">
+          {["Rapport", "Plan"].map((btnText, index) => (
+            <BtnWithIcon
+              key={index}
+              btnLabel={btnText}
+              onClick={(e) => addAnotherRapport(e)}
+            >
+              {btnText === "Rapport" && (
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+              )}
+              {btnText === "Plan" && (
+                <>
+                  <path d="M5 1a2 2 0 0 0-2 2v1h10V3a2 2 0 0 0-2-2zm6 8H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1" />
+                  <path d="M0 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
+                </>
+              )}
+            </BtnWithIcon>
+          ))}
+        </div>
         <button
-          onClick={(e) => addAnotherRapport(e)}
-          className="btn btn-primary py-2 px-4"
-          type="button"
-        >
-          Ajouter un autre rapport
-        </button>
-        <button
-          onClick={() => {
-            etape((prevEtape) => prevEtape + 1);
-          }}
-          type="button"
-          className="btn btn-secondary py-2 px-4"
-        >
-          Enreigistrez des palns
-        </button>
-        <button
-          className="btn btn-success py-2 px-4 fw-bold"
+          className="btn btn-success fw-bold"
           type="button"
           onClick={finalDataSend}
         >
-          Terminer
+          Suivant
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            className="bi bi-arrow-right-circle-fill mx-2"
+            viewBox="0 0 16 16"
+          >
+            <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
+          </svg>
         </button>
       </div>
     </form>
   );
 };
+
 export default FormRapport;

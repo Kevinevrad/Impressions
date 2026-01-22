@@ -5,8 +5,10 @@ import Logo from "../components/MyComponents/Logo.jsx";
 import FormRapport from "../components/FormRapport.jsx";
 import ImpHeader from "../components/MyComponents/ImpHeader.jsx";
 import ProjectForm from "../components/ProjectForm.jsx";
+import FormPlan from "../components/FormPlan.jsx";
 import "../signUpStep.css";
 import DocTypeComp from "../components/MyComponents/DocTypeComp.jsx";
+import ReviewComp from "../components/ReviewComp.jsx";
 
 const NewImpression = ({ setMyProjects }) => {
   const [etape, setEtape] = useState(1);
@@ -15,7 +17,11 @@ const NewImpression = ({ setMyProjects }) => {
   const [projet, setProjet] = useState({
     nomProjet: "",
     descprojet: "",
-    docmuments: [],
+    docmuments: {
+      Rapports: [],
+      Plans: [],
+      Autres: [],
+    },
   });
 
   return (
@@ -31,19 +37,46 @@ const NewImpression = ({ setMyProjects }) => {
           {/* GREETING PART */}
           <div className="header d-flex flex-column  my-3 justify-content-center">
             <Logo logoHeight="120" />
-            <ImpHeader
-              title={etape === 1 ? "Nouvelle Impression" : "Type de Document"}
-              text1={
-                etape === 1
-                  ? "Commencez par nous donner les informations de base sur votre projet."
-                  : "Sélectionnez le type de document que vous souhaitez imprimer."
-              }
-              text2={
-                etape === 1
-                  ? "Fournissez des informations précises sur le projet que vous voulez imprimer."
-                  : "Choisissez parmi une variété d'options pour répondre à vos besoins spécifiques."
-              }
-            />
+            {etape === 1 && (
+              <ImpHeader
+                title={"Nouvelle Impression"}
+                text1={
+                  "Commencez par nous donner les informations de base sur votre projet."
+                }
+                text2={
+                  "Fournissez des informations précises sur le projet que vous voulez imprimer."
+                }
+              />
+            )}
+
+            {etape === 2 && docType == "" && (
+              <ImpHeader
+                title={"Type de Document"}
+                text1={
+                  "Choisissez le type de document que vous souhaitez imprimer."
+                }
+                text2={
+                  "Cela nous aidera à adapter nos services à vos besoins spécifiques."
+                }
+              />
+            )}
+
+            {etape === 2 && docType != "" && (
+              <ImpHeader
+                title={`${docType}`}
+                text1={`Remplissez les informations du ${docType.toLowerCase()} que vous souhaitez imprimer.`}
+                text2={
+                  "Cela nous aidera à adapter nos services à vos besoins spécifiques."
+                }
+              />
+            )}
+            {etape === 3 && (
+              <ImpHeader
+                title={`Review`}
+                text1={`Veuillez verifier l'ensemble des données entrées et éffectuer des modification si le besoin se présente`}
+                text2={""}
+              />
+            )}
           </div>
 
           {/* FORM FOR PROJECT INFOS */}
@@ -54,9 +87,27 @@ const NewImpression = ({ setMyProjects }) => {
           )}
 
           {/* SHOW FORM BASE ON DOC TYPE */}
-          {docType === "Rapport" && etape === 2 ? (
-            <FormRapport></FormRapport>
-          ) : null}
+          {/* FORM RAPPORT -- ---------- */}
+          {docType === "Rapport" && etape === 2 && (
+            <FormRapport
+              setProjet={setProjet}
+              etape={setEtape}
+              documentType={setDocType}
+            />
+          )}
+
+          {/* FORM PLAN -- ------------ */}
+          {docType === "Plan" && etape === 2 && (
+            <FormPlan
+              setProjet={setProjet}
+              etape={setEtape}
+              documentType={setDocType}
+            />
+          )}
+
+          {etape === 3 && <ReviewComp projet={projet} />}
+
+          {console.log(projet)}
         </div>
       </div>
     </div>
