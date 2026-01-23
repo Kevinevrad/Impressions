@@ -2,15 +2,23 @@ import { useState } from "react";
 import InputField from "./MyComponents/InputField";
 import Textarea from "./MyComponents/TextArea";
 import BtnWithIcon from "./BtnWithIcon.jsx";
+import InputRadio from "./MyComponents/InputRadio.jsx";
 
 const FormRapport = ({ setProjet, etape, documentType }) => {
   const [nomRapport, setNomRapport] = useState("");
   const [descriptionRapport, setDescriptionRapport] = useState("");
   const [nombrePages, setNombrePages] = useState(1);
   const [exemplaires, setExemplaires] = useState(1);
+  const [format, setFormat] = useState("");
+  let formatChecked = false;
   const [errors, setErrors] = useState({});
 
-  const validateRapport = (e) => {
+  const handleRadioChange = (e) => {
+    setFormat(e.target.value);
+    formatChecked = !formatChecked;
+  };
+
+  const validateRapport = () => {
     const newErrors = {};
 
     if (!nomRapport) {
@@ -18,6 +26,9 @@ const FormRapport = ({ setProjet, etape, documentType }) => {
     }
     if (!descriptionRapport) {
       newErrors.descriptionRapport = "La description du rapport est requise";
+    }
+    if (!format) {
+      newErrors.format = "Format requis";
     }
     if (nombrePages < 1) {
       newErrors.nombrePages = "❌ Erreur : Entrez un nombre >= 1";
@@ -42,9 +53,9 @@ const FormRapport = ({ setProjet, etape, documentType }) => {
     e.preventDefault();
     // FORMATING DATA
     const newRapport = {
-      format: "A4",
       nomRapport,
       descriptionRapport,
+      format,
       nombrePages,
       exemplaires,
       nbreTotalPages: nombrePages * exemplaires,
@@ -58,9 +69,9 @@ const FormRapport = ({ setProjet, etape, documentType }) => {
         // UPDATE PARENT STATE WITH NEW RAPPORT
         setProjet((prevProjet) => ({
           ...prevProjet,
-          docmuments: {
-            ...prevProjet.docmuments,
-            Rapports: [...prevProjet.docmuments.Rapports, newRapport],
+          documents: {
+            ...prevProjet.documents,
+            Rapports: [...prevProjet.documents.Rapports, newRapport],
           },
         }));
         // RESET FORM FIELDS
@@ -81,27 +92,54 @@ const FormRapport = ({ setProjet, etape, documentType }) => {
   };
 
   return (
-    <form className="col-12">
-      <InputField
-        label={"Nom du rapport"}
-        type="text"
-        value={nomRapport}
-        placeholder={"Entrez le nom du rapport..."}
-        onChange={(e) => setNomRapport(e.target.value)}
-        errors={errors.nomRapport}
-        crutial={true}
-      ></InputField>
+    <form>
+      <div className="row gap-2 mb-4">
+        <div className="col  border px-3 py-2">
+          <InputField
+            label={"Nom du rapport"}
+            type="text"
+            value={nomRapport}
+            placeholder={"Entrez le nom du rapport..."}
+            onChange={(e) => setNomRapport(e.target.value)}
+            errors={errors.nomRapport}
+            crutial={true}
+          ></InputField>
+          <div className="col">
+            <div className="col  d-flex flex-row align-items-center justify-content-between gap-3">
+              <label className="form-label fw-bold" htmlFor="fomatPlan">
+                Format du plan <span className="text-danger">*</span>
+              </label>
+              <div className="d-flex flex-row align-items-center gap-4">
+                {["A3", "A4"].map((formatRapport, index) => (
+                  <InputRadio
+                    format={formatRapport}
+                    checked={formatRapport === format ? true : false}
+                    onChange={handleRadioChange}
+                    key={index}
+                    errors={errors.format}
+                  />
+                ))}
+                {errors.formatPlan && (
+                  <div className="text-danger">{errors.formatPlan}</div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <Textarea
-        label={"Description du rapport"}
-        placeholder={"Décrivez le rapport en quelques mots..."}
-        value={descriptionRapport}
-        onChange={(e) => setDescriptionRapport(e.target.value)}
-        errors={errors.descriptionRapport}
-      ></Textarea>
+        <div className="col border px-3 py-2 ">
+          <Textarea
+            label={"Description du rapport"}
+            placeholder={"Décrivez le rapport en quelques mots..."}
+            value={descriptionRapport}
+            onChange={(e) => setDescriptionRapport(e.target.value)}
+            errors={errors.descriptionRapport}
+          ></Textarea>
+        </div>
+      </div>
 
-      <div className="row">
-        <div className="col">
+      <div className="row gap-2 mb-4">
+        <div className="col border  px-3 py-2">
           <InputField
             label={"Nombre de pages"}
             type="number"
@@ -111,7 +149,7 @@ const FormRapport = ({ setProjet, etape, documentType }) => {
             crutial={true}
           />
         </div>
-        <div className="col">
+        <div className="col border px-3 py-2">
           <InputField
             label={"Exemplaires"}
             type="number"
@@ -123,7 +161,7 @@ const FormRapport = ({ setProjet, etape, documentType }) => {
         </div>
       </div>
       <div className="col gap-4 d-flex align-items-end justify-content-center mt-2">
-        <div className="col d-flex gap-4 align-items-end justify-content-start">
+        <div className="col  px-3 py-2 d-flex gap-4 align-items-end justify-content-start ">
           {["Rapport", "Plan"].map((btnText, index) => (
             <BtnWithIcon
               key={index}

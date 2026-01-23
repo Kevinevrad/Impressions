@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import InputField from "./MyComponents/InputField";
 import TextArea from "./MyComponents/TextArea";
 
-const ProjectForm = ({ onNextStep }) => {
+const ProjectForm = ({ onNextStep, setProjet }) => {
   const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -31,10 +31,11 @@ const ProjectForm = ({ onNextStep }) => {
     e.preventDefault();
 
     if (validateForm()) {
-      console.log("Formulaire valide ✅", {
-        projectName,
-        description,
-      });
+      setProjet((prevState) => ({
+        ...prevState,
+        projet: projectName,
+        descriptionProjet: description,
+      }));
       onNextStep();
     }
   };
@@ -59,6 +60,7 @@ const ProjectForm = ({ onNextStep }) => {
         label={"Description du projet"}
         placeholder={"Décrivez votre projet en quelques mots..."}
         value={description}
+        rowValue={4}
         onChange={(e) => {
           setDescription(e.target.value);
         }}

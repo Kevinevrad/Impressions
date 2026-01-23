@@ -1,9 +1,9 @@
 const ImpHeader = ({ title, text1, text2 }) => {
   return (
-    <div className="text-center  mt-3 mb-4">
-      <h2 className="display-4 text-uppercase  ">{title}</h2>
+    <div className="text-center  mt-3 mb-4" style={{ width: "40rem" }}>
+      <h2 className="display-4 text-uppercase text-center  ">{title}</h2>
       <p className="lead">
-        {text1} {text2}{" "}
+        {text1} <br /> {text2}{" "}
       </p>
     </div>
   );

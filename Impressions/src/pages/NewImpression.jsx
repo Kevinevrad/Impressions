@@ -15,9 +15,7 @@ const NewImpression = ({ setMyProjects }) => {
   const [docType, setDocType] = useState("");
 
   const [projet, setProjet] = useState({
-    nomProjet: "",
-    descprojet: "",
-    docmuments: {
+    documents: {
       Rapports: [],
       Plans: [],
       Autres: [],
@@ -33,9 +31,11 @@ const NewImpression = ({ setMyProjects }) => {
 
       {/* MAIN CONTENT */}
       <div className="content flex-fill d-flex flex-column py-4 w-75">
-        <div className="container w-75 form-box  ">
+        <div
+          className={`container ${etape === 3 ? "w-100" : ` w-75  p-4`} form-box `}
+        >
           {/* GREETING PART */}
-          <div className="header d-flex flex-column  my-3 justify-content-center">
+          <div className="header d-flex flex-column align-items-center  my-3 justify-content-center">
             <Logo logoHeight="120" />
             {etape === 1 && (
               <ImpHeader
@@ -80,7 +80,9 @@ const NewImpression = ({ setMyProjects }) => {
           </div>
 
           {/* FORM FOR PROJECT INFOS */}
-          {etape === 1 && <ProjectForm onNextStep={() => setEtape(2)} />}
+          {etape === 1 && (
+            <ProjectForm setProjet={setProjet} onNextStep={() => setEtape(2)} />
+          )}
           {/* FORM FORM THE TYPE OF DOC */}
           {etape === 2 && docType == "" && (
             <DocTypeComp documentType={setDocType} />

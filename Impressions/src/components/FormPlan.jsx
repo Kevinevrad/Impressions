@@ -65,9 +65,9 @@ const FormPlan = ({ documentType, setProjet }) => {
         //UPDATING DATA TO THE PARENT STATE
         setProjet((prevProjet) => ({
           ...prevProjet,
-          docmuments: {
-            ...prevProjet.docmuments,
-            Plans: [...prevProjet.docmuments.Plans, data],
+          documents: {
+            ...prevProjet.documents,
+            Plans: [...prevProjet.documents.Plans, data],
           },
         }));
         setDescriptionPlan("");
@@ -124,7 +124,7 @@ const FormPlan = ({ documentType, setProjet }) => {
             <InputRadio
               format={format}
               checked={formatPlan === format ? true : false}
-              onChange={handleRadioChange}
+              onChange={(e) => setFormatPlan(e.target.value)}
               key={index}
               errors={errors.formatPlan}
             />

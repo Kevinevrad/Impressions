@@ -8,7 +8,7 @@ const InputField = ({
   crutial = false,
 }) => {
   return (
-    <div className="col-12 form-group mb-4">
+    <div className=" col form-group mb-4">
       <label htmlFor={label} className="form-label fs-6 fw-bold">
         {label} <span>{crutial && <span className="text-danger">*</span>}</span>
       </label>
