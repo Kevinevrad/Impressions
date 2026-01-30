@@ -106,7 +106,7 @@ const NewImpression = ({ setMyProjects }) => {
               documentType={setDocType}
             />
           )}
-
+          {/* GO TO REVIEW PAGE */}
           {etape === 3 && <ReviewComp projet={projet} />}
 
           {console.log(projet)}

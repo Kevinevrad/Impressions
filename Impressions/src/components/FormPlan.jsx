@@ -4,7 +4,7 @@ import InputField from "./MyComponents/InputField";
 import TextArea from "./MyComponents/TextArea";
 import InputRadio from "./MyComponents/InputRadio";
 
-const FormPlan = ({ documentType, setProjet }) => {
+const FormPlan = ({ documentType, setProjet, etape }) => {
   const [nomPlan, setNomPlan] = useState("");
   const [descriptionPlan, setDescriptionPlan] = useState("");
   const [formatPlan, setFormatPlan] = useState("");
@@ -13,7 +13,9 @@ const FormPlan = ({ documentType, setProjet }) => {
 
   const [exemplaires, setExemplaires] = useState(1);
 
-  const loadData = () => {};
+  const loadData = (e) => {
+    etape(3);
+  };
 
   //   Handle radio button change
   const handleRadioChange = (e) => {
@@ -52,6 +54,7 @@ const FormPlan = ({ documentType, setProjet }) => {
       nomPlan: nomPlan,
       descriptionPlan: descriptionPlan,
       formatDocument: formatPlan,
+      nombrePages: 1,
       nombreExemplaire: exemplaires,
       nbreTotalImprimer: exemplaires,
     };
@@ -124,7 +127,7 @@ const FormPlan = ({ documentType, setProjet }) => {
             <InputRadio
               format={format}
               checked={formatPlan === format ? true : false}
-              onChange={(e) => setFormatPlan(e.target.value)}
+              onChange={(e) => handleRadioChange(e)}
               key={index}
               errors={errors.formatPlan}
             />
@@ -141,7 +144,9 @@ const FormPlan = ({ documentType, setProjet }) => {
             <BtnWithIcon
               btnLabel={btnText}
               key={index}
-              onClick={(e) => finalDataSend(e)}
+              onClick={(e) => {
+                finalDataSend(e);
+              }}
             >
               {btnText === "Rapport" && (
                 <>
@@ -155,7 +160,11 @@ const FormPlan = ({ documentType, setProjet }) => {
             </BtnWithIcon>
           ))}
         </div>
-        <button className="btn btn-success fw-bold" type="submit">
+        <button
+          className="btn btn-success fw-bold"
+          type="button"
+          onClick={(e) => loadData(e)}
+        >
           Suivant
           <svg
             xmlns="http://www.w3.org/2000/svg"
