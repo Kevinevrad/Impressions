@@ -23,7 +23,22 @@ export const creatingProject = async (req, res) => {
  *CREATING HANDLE FUNCTION
  *THAT MANAGE THE UPDATING OF AN EXISTING PROJECT
  */
-export const updatingProject = async (req, res) => {};
+export const updatingProject = async (req, res) => {
+  const { id } = req.params;
+  // const { name, description } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res
+      .status(404)
+      .json({ error: "❌ No such project found ... id invalid" });
+  }
+  const projectUpdating = await Project.findByIdAndUpdate(id, req.body);
+
+  if (!projectUpdating) {
+    return res.status(400).json({ error: " ❌ Nothing Found" });
+  }
+  res.status(200).json(projectUpdating);
+};
 
 /*
  ?DELETE REQUEST
@@ -32,13 +47,16 @@ export const updatingProject = async (req, res) => {};
  */
 
 export const deletingProject = async (req, res) => {
-  //   const { id } = req.params;
-  //   const allProject = await Project.find({}).sort({ createdAt: -1 });
-  //   if (!mongoose.ObjectId.isValid(id)) {
-  //     return res.status(404).json({ error: "❌ NO such project exist§" });
-  //   }
-  //   if (allProject.find()) {
-  //   }
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "❌ Project not found id invalid" });
+  }
+  const projectDeleted = await Project.findByIdAndDelete(id);
+
+  if (!projectDeleted) {
+    return res.status(400).json({ error: "❌ Project not found" });
+  }
+  res.status(200).json({ message: "Element deleted", projectDeleted });
 };
 
 /*

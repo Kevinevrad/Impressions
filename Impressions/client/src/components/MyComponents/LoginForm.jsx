@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import InputField from "./InputField";
+// import { validateForm } from "../../utils/functions";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -28,7 +29,6 @@ const LoginForm = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   // FORM SUBMISSION HANDLER
   const handleSubmit = (e) => {
     e.preventDefault();

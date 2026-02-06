@@ -4,6 +4,7 @@ import {
   deletingProject,
   getProject,
   getProjects,
+  updatingProject,
 } from "../controllers/projectController.js";
 
 // CREATING THE ROUTER
@@ -22,10 +23,6 @@ router.get("/:id", getProject);
 router.delete("/:id", deletingProject);
 
 // UPDATE PROJECT
-router.patch("/:id", (req, res) => {
-  res.json({
-    mssg: "UPDATE A SPECIFIC PROJECT",
-  });
-});
+router.patch("/:id", updatingProject);
 
 export default router;
