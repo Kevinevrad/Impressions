@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 
 // * ROUTES
 import projects from "./routes/projectRoutes.js";
-import users from "./routes/users.js";
+import users from "./routes/usersRoutes.js";
 
 dotenv.config();
 
