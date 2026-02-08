@@ -39,3 +39,14 @@ export const getUser = async (req, res) => {
   }
   res.status(200).json(currUser);
 };
+
+// * GET ALL USERS
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const allUsers = await User.find({}).sort({ createdAt: -1 });
+    res.status(200).json({ allUsers });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};

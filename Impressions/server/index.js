@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 
 // * ROUTES
 import projects from "./routes/projectRoutes.js";
+import rapports from "./routes/rapportRoutes.js";
 import users from "./routes/usersRoutes.js";
 
 dotenv.config();
@@ -32,6 +33,12 @@ app.use("/api/projects", projects);
  TODO: SETTING ROUTES FOR CREATING USER 
  */
 app.use("/api/users", users);
+
+/*
+ * SETTING RAPPORTS ROUTES
+ TODO: SETTING ROUTES FOR CREATING RAPPORT DOC 
+ */
+app.use("/api/projects/rapports", rapports);
 
 /*
  *CONNECTING MY APP TO MONGODB
