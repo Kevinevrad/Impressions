@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 import projects from "./routes/projectRoutes.js";
 import rapports from "./routes/rapportRoutes.js";
 import users from "./routes/usersRoutes.js";
+import plans from "./routes/planRoutes.js";
 
 dotenv.config();
 
@@ -15,7 +16,9 @@ dotenv.config();
 app.use(express.json());
 
 app.use((req, res, next) => {
-  console.log(req.method);
+  console.log(req.params);
+  // console.log(req.params);
+
   next();
 });
 
@@ -38,7 +41,13 @@ app.use("/api/users", users);
  * SETTING RAPPORTS ROUTES
  TODO: SETTING ROUTES FOR CREATING RAPPORT DOC 
  */
-app.use("/api/projects/rapports", rapports);
+app.use("/api/projects", rapports);
+
+/*
+ * SETTING RAPPORTS ROUTES
+ TODO: SETTING ROUTES FOR CREATING PLAN DOC 
+ */
+app.use("/api/docs", plans);
 
 /*
  *CONNECTING MY APP TO MONGODB

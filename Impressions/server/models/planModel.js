@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import Project from "./projectModel.js";
-const RapportSchema = new Schema(
+
+const PlanSchema = new Schema(
   {
     name: {
       type: String,
@@ -10,23 +11,18 @@ const RapportSchema = new Schema(
       type: String,
       required: true,
     },
-
     docFormat: {
       type: String,
       required: true,
     },
-
     nPages: {
       type: Number,
-      required: true,
     },
-
     nExemplaires: {
       type: Number,
       required: true,
     },
-
-    nPagesImp: {
+    pagesImp: {
       type: Number,
     },
 
@@ -41,4 +37,4 @@ const RapportSchema = new Schema(
   },
 );
 
-export default mongoose.model("Rapport", RapportSchema);
+export default mongoose.model("Plan", PlanSchema);

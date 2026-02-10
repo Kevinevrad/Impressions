@@ -6,7 +6,7 @@ const Login = () => {
   return (
     <div className="container-fluid vh-100 d-flex justify-content-center align-items-center px-8">
       {/* LARGEUR RESPONSIVE  */}
-      <div className="col-xs-5 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+      <div className="col-xs-5 col-sm-9 col-md-7 col-lg-5 col-xl-4">
         {/* LOGO COMPONENT */}
         <Logo logoHeight="100" />
 

@@ -9,15 +9,17 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        {/* <Route path="/register" element={<RegisterPage />} /> */}
-        <Route
-          path="/new-impression"
-          element={<NewImpression setMyProjects={setProjects} />}
-        />
-        {/* <Route path="*" element={<Navigate to="/" />} /> */}
-      </Routes>
+      <div className="container">
+        <Routes>
+          <Route path="/" element={<Login />} />
+          {/* <Route path="/register" element={<RegisterPage />} /> */}
+          <Route
+            path="/new-impression"
+            element={<NewImpression setMyProjects={setProjects} />}
+          />
+          {/* <Route path="*" element={<Navigate to="/" />} /> */}
+        </Routes>
+      </div>
     </BrowserRouter>
   );
 }
